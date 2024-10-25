@@ -2,24 +2,39 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/user-routes.js";
-dotenv.config({ path: "./.env" });
+import adminRouter from "./routes/admin-routes.js";
+import movieRouter from "./routes/movie-routes.js";
+import cors from 'cors';
+import bookingsRouter from "./routes/booking-routes.js";
+
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
+app.use(express.json());
+// const PORT = process.env.PORT || 3000;
 
 //middleware
-app.use(express.json())
 app.use("/users", userRouter);
+app.use("/admin", adminRouter);
+app.use("/movie", movieRouter);
+app.use("/booking", bookingsRouter);
+
+
 
 mongoose
   .connect(
-    "mongodb+srv://satyanarayanrout1019994:ItismitaBal@cluster0.t4yzk.mongodb.net"
+    `mongodb+srv://satyanarayanrout1019994:${process.env.MONGODB_PASSWORD}@cluster0.mpgzc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
   )
   .then(() =>
-    app.listen(PORT, () => {
-      console.log(`Connected to Database And Server Running at ${PORT}`);
-    })
+    app.listen(3000, () =>
+      console.log("Connected To Database And Server is running")
+    )
   )
-  .catch((error) => {
-    console.error("Database connection error: ", error);
-  });
+  .catch((error) => console.log(error));
+
+
 

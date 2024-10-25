@@ -1,7 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
-{
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -14,11 +13,15 @@ const userSchema = new mongoose.Schema(
     password: {
         type: String,
         required: true,
-        minLength: true,
+        minLength: 6 // Correcting this to set a minimum length, usually a number is expected
     },
-}, 
-{timestamps:true})
+    bookings: [{
+        type: mongoose.Types.ObjectId,
+        ref: "Booking"
+    }]
+}, { timestamps: true });
 
-// export default const User = mongoose.model("User", userSchema)
+// Correcting the export statement
+const User = mongoose.model("User", userSchema);
+export default User;
 
-export default mongoose.model("User", userSchema);
